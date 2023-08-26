@@ -1,0 +1,141 @@
+<% var player; var scoreResult; %>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>進行</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <%- include('../share/stylesheet.ejs') %>
+            <script type="text/javascript" src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <header class="sticky-top">
+            <nav class="navbar navbar-expand-xl navbar-light" style="background: rgb(2,0,36);
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
+                <div class="container-fluid">
+
+                    <div>
+                        <a class="navbar-brand"><img src="/public/acarogo.png" alt="" style="width: 50px;"></a>
+                    </div>
+                    <ul class="ms-auto nav nav-tabs" id="nav-ul">
+                        <li class="nav-item " id="nav1">
+                            <a href="#kind1" class="nav-link p-2" data-bs-toggle="tab"><img src="/public/img/stick.png"
+                                    style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav2">
+                            <a href="#kind2" class="nav-link p-2" data-bs-toggle="tab"><img src="/public/img/ring.png"
+                                    style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav3">
+                            <a href="#kind3" class="nav-link p-2" data-bs-toggle="tab"><img src="/public/img/rope.png"
+                                    style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav4">
+                            <a href="#kind4" class="nav-link p-2" data-bs-toggle="tab"><img
+                                    src="/public/img/clab_men.png" style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav5">
+                            <a href="#kind5" class="nav-link p-2" data-bs-toggle="tab"><img src="/public/img/dantai.png"
+                                    style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav6">
+                            <a href="#kind6" class="nav-link p-2" data-bs-toggle="tab" style="color: #fff">mix</a>
+                        </li>
+                        <li class="nav-item" id="nav7">
+                            <a href="#kind7" class="nav-link p-2" data-bs-toggle="tab"><img src="/public/img/toshu.png"
+                                    style="height: 30px; width: 30px;"></a>
+                        </li>
+                        <li class="nav-item" id="nav8">
+                            <a href="#kind8" class="nav-link p-2" data-bs-toggle="tab" style="color: #fff">ALL</a>
+                        </li>
+                    </ul>
+                    <div id="category" class="px-2"></div>
+                </div>
+            </nav>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <input type="hidden" name="judge" id="judge" value="<%=judge%>">
+                <input type="hidden" name="game_id" id="game_id" value="<%=game_id%>">
+                <input type="hidden" name="type" id="type" value="<%=type%>">
+                <input type="hidden" id="category_name" value="">
+                <input type="hidden" name="" id="tv_age" value="">
+                <input type="hidden" name="" id="tv_category" value="">
+
+                <main class="col-md-12 ms-sm-auto col-lg-12 col-xl-12 px-md-2">
+                    <div class="row mb-3 me-0">
+                        <div class="card mt-2  mx-2 px-0">
+                            <div class="card-header px-2 text-center">
+                                <div class="fontBK text-start fw-bold">大会進行プログラム</div>
+                                <div class="fontBK prerap" id="game-name"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content ps-2" id="tab-body">
+                                    <div class="tab-pane" id="kind1">
+                                        <div id="table-area-kind1">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind2">
+                                        <div id="table-area-kind2">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind3">
+                                        <div id="table-area-kind3">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind4">
+                                        <div id="table-area-kind4">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind5">
+                                        <div id="table-area-kind5">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind6">
+                                        <div id="table-area-kind6">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind7">
+                                        <div id="table-area-kind7">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="kind8">
+                                        <div id="table-area-All">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <script src="/public/javascripts/function/socket_top.js"></script>
+            <script src="/public/javascripts/function/programFunc/program_socket.js"></script>
+            <script src="/public/javascripts/function/programFunc/program_table.js"></script>
+            <script src="/public/javascripts/function/programFunc/program_func.js"></script>
+            <script>
+                const obj = (x) => document.getElementById(x);
+                // const category_id = obj('cate_id').value;
+                const game_id = obj('game_id').value
+                const gameroom = 'game' + game_id;
+                const type = obj('type').value;
+                const judge = obj('judge').value;
+                (function () {
+                    game_check()
+                }());
+                $(function () {
+                    $(document).on('change', '#category_id', function () {
+                        navSet($(this).val());
+                    });
+                });
+            </script>
+            <script src="/public/javascripts/function/judgeFunc/judge_name.js"></script>
+    </body>
+
+    </html>

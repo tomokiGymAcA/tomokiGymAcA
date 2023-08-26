@@ -1,0 +1,119 @@
+<% var games; %>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LOGIN</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <%- include('./share/stylesheet.ejs') %>
+            <script type="text/javascript" src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+    </head>
+
+    <body>
+        <%- include("./share/navber.ejs"); %>
+            <div class="container-fluid">
+                <div class="row">
+                    <%- include("./share/sideber.ejs") %>
+                        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-2">
+                            <div class="low mb-3">
+                                <div
+                                    class="card fontBK col-5 mt-2 text-center 	position-absolute top-50 start-50 translate-middle">
+                                    <div id="log-form">
+                                        <div class="card-header">
+                                            <h5>login</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="mb-3 row" id="err-text">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">UserName</label>
+                                                    <input type="text" class="form-control" id="name" value=""
+                                                        name="user" autocomplete="off">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="pass" class="form-label">Password</label>
+                                                    <input type="text" class="form-control" id="pass" name="pass"
+                                                        oncopy="return false" style="-webkit-text-security:disc;"
+                                                        autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <button type="submit" class="btn btn-primary"
+                                                onclick="formPost()">login</button>
+                                        </div>
+                                    </div>
+                                    <div id="url-form" class="hidden">
+                                        <div class="card-header">
+                                            <h5>各種設定</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="continer">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">
+                                                        <a href="/game_set">大会登録</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <a href="/category">カテゴリー登録</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <a href="/entry">選手登録</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <a href="/result">順位決定</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                </div>
+                <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+                <script>
+                    (function () {
+                        $('.hidden').hide();
+                    }());
+
+                    function formPost() {
+                        console.log('post')
+                        var user = document.getElementById('name').value;
+                        var pass = document.getElementById('pass').value;
+                        var log_form = document.getElementById('log-form');
+                        var url_form = document.getElementById('url-form');
+                        var err_text = document.getElementById('err-text');
+                        $.ajax({
+                            url: '/login',
+                            type: 'post',
+                            catch: false,
+                            dataType: 'json',
+                            data: {
+                                user: user,
+                                pass: pass
+                            }
+                        })
+                            .done(function (data) {
+                                if (data == 'ok') {
+                                    log_form.classList.add('hidden');
+                                    url_form.classList.remove('hidden');
+                                    url_form.classList.add('show');
+                                    $('.hidden').hide();
+                                    $('.show').show();
+                                } else {
+                                    err_text.innerHTML = '<span style="color: red;">入力されたパスワードが違います</span>';
+                                }
+                            })
+                            // Ajaxリクエストが失敗した場合
+                            .fail(function () {
+                                window.alert('正しい結果を得られませんでした。');
+                            });
+                    }
+                </script>
+    </body>
+
+    </html>

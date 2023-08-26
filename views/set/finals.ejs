@@ -1,0 +1,230 @@
+<% 
+var player;
+var playerScore;
+%>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>決勝進出リスト</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <%- include('../share/stylesheet.ejs')  %>
+            <link rel="stylesheet" href="/public/stylesheets/secretary.css">
+            <script src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <body>
+        <%- include("../share/navber.ejs"); %>
+            <input type="hidden" name="" id="game_id" value="<%= game_id %>">
+            <div class="container-fluid p-m-0">
+                <div class="row">
+                    <main class="col-md-12 ms-sm-auto col-lg-12 px-md-2">
+                        <div class="low mb-2">
+                            <div class="card mt-1 mb-1 fontBK check-sheet">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-3" id="category">
+
+                                        </div>
+                                        <div class="col-3" id="kind">
+
+                                        </div>
+                                        <div class="col-3" id="num">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0" id="result-body">
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+                <script>
+                    const obj = (x) => document.getElementById(x);
+                    const game_id = obj('game_id').value;
+                    const category = obj('category');
+                    const kind = obj('kind')
+
+                    $(function() {
+                        category_get();
+                        $(document).on('change', '#category_id', function() {
+                            var id = $(this).val();
+                            console.log(id)
+                            categoryCheck(id)
+                        });
+                        $(document).on('change', '#kindval', function() {
+                            var id = $(this).val();
+                            console.log(id)
+                        });
+                    });
+                    // カテゴリー取得　選択セレクト表表示
+                    function category_get() {
+                        $.ajax({
+                                url: `/category/${game_id}`,
+                                type: 'post',
+                                catch: false,
+                                dataType: 'json',
+                                data: {
+                                    game_id: game_id
+                                }
+                            })
+                            .done(function(data) {
+                                // データに応じてセレクトをついか
+                                var select = document.createElement('select')
+                                select.classList.add('form-control', 'form-control-sm', 'form-select');
+                                select.setAttribute('name', 'category_id')
+                                select.setAttribute('id', 'category_id')
+                                var option = document.createElement('option');
+                                option.value = '999';
+                                option.textContent = '部門を選択してください。';
+                                select.appendChild(option);
+                                for (var i = 0; i < data.length; i++) {
+                                    var option = document.createElement('option');
+                                    option.value = data[i].category_id;
+                                    option.textContent = data[i].category_name;
+                                    select.appendChild(option);
+                                }
+                                category.appendChild(select);
+                            })
+                            // Ajaxリクエストが失敗した場合
+                            .fail(function() {
+                                window.alert('正しい結果を得られませんでした。');
+                            })
+                            .always(function() {})
+                    }
+
+                    // カテゴリーの登録種目取得
+                    function categoryCheck(category_id) {
+                        $.ajax({
+                                url: `/category/${category_id}`,
+                                type: 'get',
+                                catch: false,
+                                dataType: 'json',
+                            })
+                            .done(function(data) {
+                                console.log(data)
+                                    // データに応じてセレクトをついか
+                                var select = document.createElement('select')
+                                select.classList.add('form-control', 'form-control-sm', 'form-select');
+                                select.setAttribute('name', 'kindval')
+                                select.setAttribute('id', 'kindval')
+                                var option = document.createElement('option');
+                                option.value = '999';
+                                option.textContent = '種目を選択してください';
+                                select.appendChild(option);
+
+                                if (data[0].kind1 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 1;
+                                    option.textContent = kindName(1);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind2 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 2;
+                                    option.textContent = kindName(2);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind3 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 3;
+                                    option.textContent = kindName(3);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind4 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 4;
+                                    option.textContent = kindName(4);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind5 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 5;
+                                    option.textContent = kindName(5);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind6 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 6;
+                                    option.textContent = kindName(6);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kind7 == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 7;
+                                    option.textContent = kindName(7);
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kokutai == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 'kokutai';
+                                    option.textContent = kindName('kokutai');
+                                    select.appendChild(option);
+                                };
+                                if (data[0].kozin == 1) {
+                                    var option = document.createElement('option');
+                                    option.value = 1;
+                                    option.textContent = kindName('kozin');
+                                    select.appendChild(option);
+                                };
+                                kind.appendChild(select);
+                            })
+                            // Ajaxリクエストが失敗した場合
+                            .fail(function() {
+                                window.alert('正しい結果を得られませんでした。');
+                            });
+
+                    }
+
+                    function kindName(val) {
+                        var icon;
+                        switch (`${val}`) {
+                            case '1':
+                                icon = 'stick';
+                                break;
+                            case '2':
+                                icon = 'ring';
+                                break;
+                            case '3':
+                                icon = 'rope';
+                                break;
+                            case '4':
+                                icon = 'clab';
+                                break;
+                            case '5':
+                                icon = '団体';
+                                break;
+                            case '6':
+                                icon = '団体mix';
+                                break;
+                            case '7':
+                                icon = '徒手';
+                                break;
+                            case 'kokutai':
+                                icon = '国体';
+                                break;
+                            case 'kozin':
+                                icon = '個人総合';
+                                break;
+
+                        }
+                        return icon;
+                    }
+                </script>
+                <script>
+                    // 表示非表示の切り替え
+                    $(function() {
+                        $(document).on('click', '.secList', function() {
+                            $('.' + $(this).attr('id')).toggle();
+                        });
+                    });
+                </script>
+    </body>
+
+    </html>

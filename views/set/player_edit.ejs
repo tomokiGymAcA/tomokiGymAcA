@@ -1,0 +1,75 @@
+<% var player; var playerScore; var player_id; var kind_num; %>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="Shift_JIS">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>選手編集</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/public/stylesheets/index.css">
+        <link rel="stylesheet" href="/public/stylesheets/font.css">
+        <link rel="stylesheet" href="/public/stylesheets/sideber.css">
+        <link rel="stylesheet" href="/public/stylesheets/edit_table.css">
+
+        <script src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+
+    </head>
+
+    <body>
+        <%- include("../share/navber.ejs"); %>
+            <div class="container-fluid">
+                <div class="row">
+                    <%- include("../share/sideber.ejs") %>
+                        <main class=" ms-sm-auto col-xl-10 col-lg-12 col-md-12 col-xs-12">
+                            <div class="row mb-2 px-2" id="score-send">
+                                <input type="hidden" name="" id="game_id" value="<%= game_id %>">
+                                <div class="card my-1 px-0 fontBK">
+                                    <div class="card-header" style="margin-right: 0;">
+                                        <span class="fw-bold">選手編集</span>
+                                        <div class="col-12 mt-2" id="categoryfield"></div>
+                                        <div class="col-12 mt-2">
+                                            <label class="form-label" for="kindselect">種目選択</label>
+                                            <select class="form-select" id="kindselect" aria-label="種目選択">
+                                                <option value="1">ステック</option>
+                                                <option value="2">リング</option>
+                                                <option value="3">ロープ</option>
+                                                <option value="4">クラブ</option>
+                                                <option value="5">団体</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <form action="/player_edit" method="post" id="dataform">
+                                            <input type="hidden" name="sql" id="sql" value="">
+                                            <input type="hidden" name="player_id" id="player_id" value="">
+                                            <div class="mb-3 mt-1" id="playersdata"
+                                                style="min-height: 30vh; overflow: scroll;">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+            </div>
+            </main>
+            </div>
+            <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+            <script src="/public/javascripts/function/judgeFunc/judge_name.js"></script>
+            <script src="/public/javascripts/function/editFunc/edit_ajax.js"></script>
+            <script src="/public/javascripts/function/editFunc/edit_table.js"></script>
+            <script>
+                const obj = (x) => document.getElementById(x);
+                const game_id = obj('game_id').value;
+                const categoryfield = obj('categoryfield');
+            </script>
+            <script>
+                (function () {
+                    category_get();
+                }()); 
+            </script>
+    </body>
+
+    </html>

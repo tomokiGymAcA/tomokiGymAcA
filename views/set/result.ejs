@@ -1,0 +1,54 @@
+<% var player; var playerScore; %>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>得点決定</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <%- include('../share/stylesheet.ejs') %>
+            <link rel="stylesheet" href="/public/stylesheets/secretary.css">
+            <script src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <body>
+        <%- include("../share/navber.ejs"); %>
+            <div class="container-fluid p-m-0">
+                <%- include("../share/result_sideber.ejs");%>
+                    <div class="row">
+                        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-2">
+                            <div class="low mb-2">
+                                <div class="card mt-1 mb-1 fontBK check-sheet">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-7">
+                                                <div id="game-name"></div>
+                                                <div id="game-time"></div>
+                                            </div>
+                                            <div id="game-form" class="col-5"></div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body pt-0" id="result-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+                    <script src="/public/javascripts/function/resultFunc/result_func.js"></script>
+                    <script src="/public/javascripts/function/resultFunc/result_table.js"></script>
+                    <script src="/public/javascripts/function/topFunc/all_score_table.js"></script>
+                    <script>
+                        // 表示非表示の切り替え
+                        $(function () {
+                            $(document).on('click', '.secList', function () {
+                                $('.' + $(this).attr('id')).toggle();
+                            });
+                        });
+                    </script>
+    </body>
+
+    </html>

@@ -1,0 +1,107 @@
+<% var games; var text; %>
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>試合登録</title>
+        <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+        <%- include('../share/stylesheet.ejs') %>
+            <script type="text/javascript" src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+    </head>
+
+    <body>
+        <%- include("../share/navber.ejs"); %>
+            <div class="container-fluid">
+                <div class="row">
+                    <%- include("../share/sideber.ejs") %>
+                        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-2">
+                            <div class="low mb-3">
+                                <div
+                                    class="card fontBK col-5 mt-2 text-center position-absolute top-50 start-50 translate-middle">
+                                    <div class="card-header">
+                                        <h5>試合登録</h5>
+                                        <div class="text-center"></div>
+                                    </div>
+                                    <form action="/game/data" method="post">
+                                        <div class="card-body">
+                                            <div>
+                                                <% if (text) {%>
+                                                    <span class="fs-2">
+                                                        <%= text %>
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+
+                                            <div class="px-2 mb-3">
+                                                試合日:当日
+                                                <input type="date" id="game-date" class="form-control form-control-sm"
+                                                    style="height: auto;" name="game_date">
+                                            </div>
+                                            <div id="game" class="px-2 my-1">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">試合名</span>
+                                                    <input type="text" class="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm" id="game_name"
+                                                        name="game_name" style="height: auto;"
+                                                        placeholder="正確な試合名の登録をしてください。">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">表示日付</span>
+                                                    <input type="text" class="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm" id="date_time"
+                                                        name="date_time" style="height: auto;"
+                                                        placeholder="速報、賞状等に記載する日付を登録してください">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">D審判数</span>
+                                                    <input type="text" class="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm" id="d_method"
+                                                        name="d_method" style="height: auto;"
+                                                        placeholder="構成審判の人数に変更があれば入力。デフォルトは4人">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">E審判数</span>
+                                                    <input type="text" class="form-control"
+                                                        aria-label="Sizing example input"
+                                                        aria-describedby="inputGroup-sizing-sm" id="e_method"
+                                                        name="e_method" style="height: auto;"
+                                                        placeholder="実施審判の人数に変更があれば入力。デフォルトは4人">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text me-5"
+                                                        id="inputGroup-sizing-sm">オーダータイプ設定</span>
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio" name="order_type"
+                                                            id="type1" value="1">
+                                                        <label class="form-check-label" for="type1">交互進行</label>
+                                                    </div>
+                                                    <div class="form-check me-3">
+                                                        <input class="form-check-input" type="radio" name="order_type"
+                                                            id="type2" value="2">
+                                                        <label class="form-check-label" for="type2">国体</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="order_type"
+                                                            id="type3" value="3">
+                                                        <label class="form-check-label" for="type3">単一進行</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <button type="submit" class="btn btn-primary">登録する</button>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </main>
+                </div>
+                <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    </body>
+
+    </html>

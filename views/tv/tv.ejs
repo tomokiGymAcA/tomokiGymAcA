@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV-HOME</title>
+    <link rel="stylesheet" href="/public/bootstrap-5.2.2-dist/css/bootstrap.css">
+    <%- include('../share/stylesheet.ejs') %>
+        <link rel="stylesheet" href="public/stylesheets/tv.css">
+        <script type="text/javascript" src="/public/bootstrap-5.2.2-dist/js/bootstrap.bundle.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+<body>
+    <%- include("../share/judge_navber.ejs"); %>
+        <div class="container-fluid">
+            <div class="row">
+                <main class="col-md-12 ms-sm-auto col-lg-12 col-xl-12 px-md-2">
+                    <div class="low mb-3">
+                        <div class="card fontBK col-5 mt-2 text-center 	position-absolute top-50 start-50 translate-middle"
+                            id="set-card">
+                            <div class="card-header">
+                                <h5>大会選択</h5>
+                            </div>
+                            <form action="" method="post" id="set-form" name="setform">
+                                <div class="card-body">
+                                    <div class="container">
+                                        <p>大会名</p>
+                                        <div class="px-2 text-center">
+                                            日付を選択してください
+                                            <br>
+                                            <input type="date" id="game-date" class="form-control form-control-sm"
+                                                style="height: auto;" name="game_date" value="">
+                                        </div>
+                                        <div id="game" class="px-2 mt-1"></div>
+                                        <div class="mt-2 px-2">
+                                            <select class="form-select" name="tv" aria-label="" id="tv-select">
+                                                <option selected>TV種類</option>
+                                                <option value="3">TVALL</option>
+                                                <option value="1">TV1</option>
+                                                <option value="2">TV2</option>
+                                                <option value="5">TV進行用</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <button type="submit" class="btn btn-primary">設定する</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!--script-->
+        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <script>
+            const obj = (x) => document.getElementById(x);
+            // TV設定
+            $('#set-form').on('submit', function (event) {
+                event.preventDefault();
+                // 操作対象のフォーム要素を取得
+                var $form = $(this);
+                const formElements = document.forms.setform;
+                // 送信ボタンを取得
+                // （後で使う: 二重送信を防止する。）
+                var tv = formElements.tv.value;
+                var game = formElements.game_id.value;
+                if (game) {
+                    if (tv == 5) {
+                        location = `/tv_next/${game}`;
+                    } else if (tv > 0 && tv < 4) {
+                        location = `/tv_player/${game}/${tv}`;
+                    }
+                } else if (!game) {
+                    window.alert('正しい試合日を設定してください。')
+                } else {
+                    window.alert('入力値に問題がありました。もう一度登録してください。')
+                }
+            });
+            // 試合検索
+            $('#game-date').on('change', function () {
+                var date_data = $('#game-date').val();
+                $.ajax({
+                    url: '/entry/1',
+                    type: 'post',
+                    catch: false,
+                    dataType: 'json',
+                    data: {
+                        game_date: date_data
+                    }
+                })
+                    .done(function (data) {
+                        var game = obj('game');
+                        if (data[0].game_id == 0) {
+                            game.innerHTML = data[0].text_data;
+                        } else {
+                            game.innerHTML = '<p class="my-1">試合を選択してください</p>'
+                            var select = document.createElement('select')
+                            select.classList.add('form-control', 'form-control-sm', 'form-select');
+                            select.setAttribute('name', 'game_id')
+                            select.setAttribute('id', 'game_id');
+                            for (var i = 0; i < data.length; i++) {
+                                var option = document.createElement('option');
+                                option.value = data[i].game_id;
+                                option.textContent = data[i].game_name;
+                                select.appendChild(option);
+                            }
+                            game.appendChild(select);
+                        }
+                    })
+                    // Ajaxリクエストが失敗した場合
+                    .fail(function () {
+                        window.alert('正しい結果を得られませんでした。');
+                    });
+            });
+        </script>
+</body>
+
+</html>

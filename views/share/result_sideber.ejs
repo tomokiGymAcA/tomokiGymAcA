@@ -1,0 +1,25 @@
+<nav id="sidebar" class="col-md-2 col-lg-2 d-xl-block bg-light sidebar collapse">
+    <div class="position-sticky pt-md-2 px-2 container fontBK">
+        <ul class="nav flex-column">
+            <div class="px-2 text-center">
+                日付を選択してください
+                <br>
+                <input type="date" id="game-date" class="form-control form-control-sm" style="height: auto;" name="game_date">
+            </div>
+            <div id="game" class="px-2 mt-1"></div>
+
+            <div id="category" class="px-2 mb-1"></div>
+            <span id="err"></span>
+            <li class="nav-item">
+                <a href="/admin/<%= game_id %>">管理画面</a>
+            </li>
+            <li class="nav-item">
+                <a href="/score">審判画面</a>
+            </li>
+            <li class="nav-item">
+                <a href="/tv">TV選択画面</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
